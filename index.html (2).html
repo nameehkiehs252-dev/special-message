@@ -1,0 +1,148 @@
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  .wrap { display: flex; justify-content: center; padding: 2rem 0; font-family: var(--font-sans); }
+  .card { background: #1d5f7b; border-radius: 20px; width: 320px; overflow: hidden; }
+  .lock-screen { padding: 2rem 1.5rem; text-align: center; }
+  .lock-icon { font-size: 40px; margin-bottom: 12px; }
+  .lock-title { font-size: 16px; font-weight: 500; color: #fff; margin-bottom: 6px; }
+  .lock-sub { font-size: 12px; color: rgba(255,255,255,0.45); margin-bottom: 24px; line-height: 1.6; }
+  .dots { display: flex; justify-content: center; gap: 12px; margin-bottom: 24px; }
+  .dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.3); background: transparent; transition: background 0.2s, border-color 0.2s; }
+  .dot.filled { background: #a6d8de; border-color: #2e607d; }
+  .dot.error { background: #c0392b; border-color: #3cc8e7; }
+  .numpad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; max-width: 220px; margin: 0 auto; }
+  .key { background: rgba(255,255,255,0.08); border: none; border-radius: 50%; width: 60px; height: 60px; font-size: 18px; font-weight: 500; color: #fff; cursor: pointer; font-family: var(--font-sans); transition: background 0.15s; display: flex; align-items: center; justify-content: center; margin: 0 auto; }
+  .key:hover { background: rgba(255, 255, 255, 0.18); }
+  .key:active { background: rgba(255,255,255,0.28); }
+  .key.del { font-size: 14px; color: rgba(255,255,255,0.6); }
+  .shake { animation: shake 0.4s ease; }
+  @keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-8px)} 40%{transform:translateX(8px)} 60%{transform:translateX(-5px)} 80%{transform:translateX(5px)} }
+  .hint-text { font-size: 11px; color: rgba(255,255,255,0.3); margin-top: 16px; }
+
+  .note-screen { display: none; padding: 0; }
+  .note-header { background: #4c7079; padding: 14px 20px; text-align: center; }
+  .note-badge { font-size: 10px; color: rgba(255,255,255,0.6); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+  .note-title { font-size: 18px; font-weight: 500; color: #fff; }
+  .note-body { padding: 20px; background: #0f262d; }
+  .note-para { font-size: 13px; color: rgba(255,255,255,0.85); line-height: 1.9; margin-bottom: 14px; }
+  .note-para span { color: #7eb9c9; font-weight: 500; }
+  .note-sign { text-align: right; font-size: 13px; color: rgba(255,255,255,0.5); margin-top: 8px; font-style: italic; }
+  .note-footer { background: #0a1f0e; padding: 12px 20px; text-align: center; }
+  .note-footer-text { font-size: 11px; color: rgba(255,255,255,0.25); }
+  .unlocked-badge { display: inline-block; background: rgba(26, 62, 92, 0.4); color: #7ebcc9; font-size: 10px; padding: 3px 10px; border-radius: 20px; margin-bottom: 12px; }
+</style>
+
+<div class="wrap">
+  <div class="card">
+
+    <div class="lock-screen" id="lock-screen">
+      <div class="lock-icon"><i class="ti ti-lock" style="font-size:40px; color:#7ec98a;" aria-hidden="true"></i></div>
+      <div class="lock-title">A note for Moinjee</div>
+      <div class="lock-sub">This message is locked.<br>Only the right person knows the code.</div>
+      <div class="dots" id="dots">
+        <div class="dot" id="d0"></div>
+        <div class="dot" id="d1"></div>
+        <div class="dot" id="d2"></div>
+        <div class="dot" id="d3"></div>
+      </div>
+      <div class="numpad">
+        <button class="key" onclick="press('1')">1</button>
+        <button class="key" onclick="press('2')">2</button>
+        <button class="key" onclick="press('3')">3</button>
+        <button class="key" onclick="press('4')">4</button>
+        <button class="key" onclick="press('5')">5</button>
+        <button class="key" onclick="press('6')">6</button>
+        <button class="key" onclick="press('7')">7</button>
+        <button class="key" onclick="press('8')">8</button>
+        <button class="key" onclick="press('9')">9</button>
+        <div></div>
+        <button class="key" onclick="press('0')">0</button>
+        <button class="key del" onclick="del()"><i class="ti ti-backspace" style="font-size:18px;" aria-hidden="true"></i></button>
+      </div>
+      <div class="hint-text" id="hint-text">Enter the code only you know</div>
+    </div>
+
+    <div class="note-screen" id="note-screen">
+      <div class="note-header">
+        <div class="note-badge">Unlocked just for you</div>
+        <div class="note-title">Dear Moinjee</div>
+      </div>
+      <div class="note-body">
+        <div style="text-align:center; margin-bottom:16px;">
+          <span class="unlocked-badge"><i class="ti ti-lock-open" style="font-size:11px; vertical-align:-1px;" aria-hidden="true"></i> unlocked</span>
+        </div>
+        <div class="note-para">
+          You know what, when you came into  my life, I wasn't expecting to fall for you, but then you made me fall for you, and I didn't even realize it.
+        </div>
+        <div class="note-para">
+          The thing is, I do have feelings for you and I don't want to lose you. Jb zyada shodey honaye lagye ap to mujhey zyada pyaarye lagney lagye. 
+        </div>
+        <div class="note-para">
+          You are my<span> Moinjee </span> I like the way you stare at me, The way you handle all my mood swings, the way you listen to all my dumb questions, and the way you make me feel comfortable and seen— This makes me feel blessed. Allhamdulillah!!!
+        </div>
+        <div class="note-para">
+          You are my person, meray Methuu hain. I want you to be my forever, <span> Moinjee</span>. Mein apki houn aur rahoun gi hamesha In Sha ALlah!! 
+        <div class="note-para">
+          Tu baat yeh hai k mein apko beyhad pasand krti houn Moinjee. Aur mein apni aagye ki sari zindagi ap k sath guzarna chahti houn!
+        </div>
+        <div class="note-sign">— Namee</div>
+      </div>
+      <div class="note-footer">
+        <div class="note-footer-text">You were always the only one who could open this</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const PASSWORD = '0921';
+  let entered = '';
+
+  function press(n) {
+    if (entered.length >= 4) return;
+    entered += n;
+    updateDots();
+    if (entered.length === 4) {
+      setTimeout(check, 200);
+    }
+  }
+
+  function del() {
+    entered = entered.slice(0, -1);
+    updateDots(false);
+    document.getElementById('hint-text').textContent = 'Enter the code only you know';
+  }
+
+  function updateDots(isError) {
+    for (let i = 0; i < 4; i++) {
+      const d = document.getElementById('d' + i);
+      d.classList.remove('filled', 'error');
+      if (i < entered.length) {
+        d.classList.add(isError === true ? 'error' : 'filled');
+      }
+    }
+  }
+
+  function check() {
+    if (entered === PASSWORD) {
+      document.getElementById('lock-screen').style.display = 'none';
+      document.getElementById('note-screen').style.display = 'block';
+    } else {
+      for (let i = 0; i < 4; i++) {
+        const d = document.getElementById('d' + i);
+        d.classList.remove('filled');
+        d.classList.add('error');
+      }
+      document.getElementById('dots').classList.add('shake');
+      document.getElementById('hint-text').textContent = 'Wrong code. Try again.';
+      setTimeout(() => {
+        document.getElementById('dots').classList.remove('shake');
+        entered = '';
+        updateDots();
+        document.getElementById('hint-text').textContent = 'Enter the code only you know';
+      }, 800);
+    }
+  }
+</script>
